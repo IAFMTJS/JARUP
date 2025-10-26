@@ -4,6 +4,7 @@
 let speechSynthesisAvailable = false;
 let speechInstance: SpeechSynthesis | null = null;
 let isInitialized = false;
+let availableVoices: SpeechSynthesisVoice[] = [];
 
 // Detect iOS
 function isIOS(): boolean {
@@ -47,15 +48,77 @@ function initializeSpeech(): void {
   try {
     // Initialize by getting voices (triggers iOS to initialize)
     const voices = speechInstance.getVoices();
+    availableVoices = voices;
     isInitialized = true;
     console.log('Speech initialized with', voices.length, 'voices');
+    
+    // Log available Japanese and Russian voices
+    const japaneseVoices = voices.filter(v => v.lang.includes('ja'));
+    const russianVoices = voices.filter(v => v.lang.includes('ru'));
+    console.log('Japanese voices:', japaneseVoices.map(v => v.name));
+    console.log('Russian voices:', russianVoices.map(v => v.name));
   } catch (error) {
     console.error('Error initializing speech:', error);
   }
 }
 
+function findVoiceForLang(lang: string): SpeechSynthesisVoice | null {
+  if (!speechInstance || availableVoices.length === 0) {
+    availableVoices = speechInstance?.getVoices() || [];
+  }
+  
+  // Try to find a native voice for the language
+  const targetLang = lang.toLowerCase();
+  
+  // For Japanese
+  if (targetLang.includes('ja')) {
+    // Look for Japanese voices (prefer Google, Yuna, or native names)
+    const preferredNames = ['google', 'yuna', 'sayaka', 'yukari'];
+    for (const name of preferredNames) {
+      const voice = availableVoices.find(v => 
+        v.lang.includes('ja') && v.name.toLowerCase().includes(name.toLowerCase())
+      );
+      if (voice) return voice;
+    }
+    // Fallback to any Japanese voice
+    const anyJapanese = availableVoices.find(v => v.lang.includes('ja'));
+    if (anyJapanese) return anyJapanese;
+  }
+  
+  // For Russian
+  if (targetLang.includes('ru')) {
+    // Look for Russian voices (prefer Katya, Milena, or other Russian names)
+    const preferredNames = ['katya', 'milena', 'yuri', 'russian'];
+    for (const name of preferredNames) {
+      const voice = availableVoices.find(v => 
+        v.lang.includes('ru') && v.name.toLowerCase().includes(name.toLowerCase())
+      );
+      if (voice) return voice;
+    }
+    // Fallback to any Russian voice
+    const anyRussian = availableVoices.find(v => v.lang.includes('ru'));
+    if (anyRussian) return anyRussian;
+  }
+  
+  // Default to any matching language
+  const matchingVoice = availableVoices.find(v => v.lang.toLowerCase().includes(targetLang));
+  if (matchingVoice) return matchingVoice;
+  
+  return null;
+}
+
 // Initialize on page load
 if (typeof window !== 'undefined' && speechInstance) {
+  // Listen for voiceschanged event (important for some browsers)
+  speechInstance.addEventListener('voiceschanged', () => {
+    if (!isInitialized) {
+      initializeSpeech();
+    } else {
+      // Update available voices
+      availableVoices = speechInstance?.getVoices() || [];
+    }
+  });
+  
   // For iOS, we need to initialize speech on the first user interaction
   const initializeOnInteraction = () => {
     initializeSpeech();
@@ -105,6 +168,15 @@ export function speak(text: string, options: {
       newUtterance.rate = options.rate ?? 0.8;
       newUtterance.pitch = options.pitch ?? 1;
       newUtterance.volume = options.volume ?? 1;
+      
+      // Find and set the appropriate voice for the language
+      const voice = findVoiceForLang(options.lang || 'en-US');
+      if (voice) {
+        newUtterance.voice = voice;
+        console.log('Using voice:', voice.name, 'for language:', options.lang);
+      } else {
+        console.warn('No specific voice found for', options.lang, ', using default');
+      }
 
       // Add event listeners to handle errors
       newUtterance.onstart = () => {
