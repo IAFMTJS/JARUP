@@ -3,6 +3,7 @@
 import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeft, Volume2, CheckCircle } from 'lucide-react';
+import { speak } from '@/lib/speech';
 
 function ReadingPageContent() {
   const router = useRouter();
@@ -74,12 +75,11 @@ function ReadingPageContent() {
     }
   };
 
-  const speak = (text: string) => {
-    if ('speechSynthesis' in window) {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = language === 'japanese' ? 'ja-JP' : 'ru-RU';
-      window.speechSynthesis.speak(utterance);
-    }
+  const handleSpeak = (text: string) => {
+    speak(text, {
+      lang: language === 'japanese' ? 'ja-JP' : 'ru-RU',
+      rate: 0.8,
+    });
   };
 
   return (
@@ -130,7 +130,7 @@ function ReadingPageContent() {
               <p className="text-xl text-gray-700 mb-4">{exercise.question}</p>
             )}
             <button
-              onClick={() => speak(exercise.display)}
+              onClick={() => handleSpeak(exercise.display)}
               className="btn-secondary inline-flex items-center gap-2"
             >
               <Volume2 size={20} />

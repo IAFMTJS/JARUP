@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeft, Volume2, Play, Check, X } from 'lucide-react';
 import { hiraganaCharacters, katakanaCharacters } from '@/lib/data/japanese';
 import { cyrillicCharacters } from '@/lib/data/russian';
+import { speak } from '@/lib/speech';
 
 type AlphabetType = 'hiragana' | 'katakana' | 'cyrillic';
 
@@ -41,13 +42,11 @@ function AlphabetPageContent() {
     return 'The Russian alphabet with 33 letters';
   };
 
-  const speak = (text: string) => {
-    if ('speechSynthesis' in window) {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = language === 'japanese' ? 'ja-JP' : 'ru-RU';
-      utterance.rate = 0.8;
-      window.speechSynthesis.speak(utterance);
-    }
+  const handleSpeak = (text: string) => {
+    speak(text, {
+      lang: language === 'japanese' ? 'ja-JP' : 'ru-RU',
+      rate: 0.8,
+    });
   };
 
   const nextChar = () => {
@@ -244,7 +243,7 @@ function AlphabetPageContent() {
               <div className="flex gap-4">
                 <button
                   onClick={() => {
-                    speak(currentChar.pronunciation);
+                    handleSpeak(currentChar.pronunciation);
                   }}
                   className="btn-secondary flex items-center gap-2"
                 >

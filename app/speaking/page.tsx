@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeft, Mic, MicOff, Volume2, CheckCircle } from 'lucide-react';
+import { speak } from '@/lib/speech';
 
 function SpeakingPageContent() {
   const router = useRouter();
@@ -36,13 +37,11 @@ function SpeakingPageContent() {
     ? ['Hello', 'Thank you', 'Excuse me', 'Nice to meet you', 'Good morning']
     : ['Hello', 'Thank you', 'Sorry', 'How are you?', 'Good morning'];
 
-  const speak = (text: string) => {
-    if ('speechSynthesis' in window) {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = language === 'japanese' ? 'ja-JP' : 'ru-RU';
-      utterance.rate = 0.8;
-      window.speechSynthesis.speak(utterance);
-    }
+  const handleSpeak = (text: string) => {
+    speak(text, {
+      lang: language === 'japanese' ? 'ja-JP' : 'ru-RU',
+      rate: 0.8,
+    });
   };
 
   const handleListen = () => {
@@ -129,7 +128,7 @@ function SpeakingPageContent() {
               <div className="text-6xl font-serif mb-4">{phrases[currentPhrase]}</div>
               <p className="text-gray-600 mb-4">{translations[currentPhrase]}</p>
               <button
-                onClick={() => speak(phrases[currentPhrase])}
+                onClick={() => handleSpeak(phrases[currentPhrase])}
                 className="btn-secondary inline-flex items-center gap-2"
               >
                 <Volume2 size={20} />

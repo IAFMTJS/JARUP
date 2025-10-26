@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeft, Volume2, RefreshCw, CheckCircle, XCircle } from 'lucide-react';
 import { japaneseVocabulary, russianVocabulary, VocabularyWord } from '@/lib/data/vocabulary';
+import { speak } from '@/lib/speech';
 
 function VocabularyPageContent() {
   const router = useRouter();
@@ -28,13 +29,12 @@ function VocabularyPageContent() {
 
   const currentWord = filteredWords[currentIndex];
 
-  const speak = (text: string) => {
-    if ('speechSynthesis' in window) {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = language === 'japanese' ? 'ja-JP' : 'ru-RU';
-      utterance.rate = 0.8;
-      window.speechSynthesis.speak(utterance);
-    }
+  const handleSpeak = (text: string, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    speak(text, {
+      lang: language === 'japanese' ? 'ja-JP' : 'ru-RU',
+      rate: 0.8,
+    });
   };
 
   const handleFlip = () => {
@@ -175,10 +175,7 @@ function VocabularyPageContent() {
                     <div className="text-center">
                       <div className="text-7xl font-serif mb-6">{currentWord.word}</div>
                       <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          speak(currentWord.pronunciation);
-                        }}
+                        onClick={(e) => handleSpeak(currentWord.pronunciation, e)}
                         className="btn-secondary inline-flex items-center gap-2"
                       >
                         <Volume2 size={20} />
