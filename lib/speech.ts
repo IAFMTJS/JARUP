@@ -147,62 +147,51 @@ export function speak(text: string, options: {
   }
 
   try {
+    // Cancel any ongoing speech
+    speechInstance.cancel();
+
+    // Find and set the appropriate voice for the language
+    const voice = findVoiceForLang(options.lang || 'en-US');
+    
+    // Create the utterance
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = options.lang || 'en-US';
     utterance.rate = options.rate ?? 0.8;
     utterance.pitch = options.pitch ?? 1;
     utterance.volume = options.volume ?? 1;
-
-    // Cancel any ongoing speech
-    speechInstance.cancel();
-
-    // For iOS Chrome, we need to wait a bit
-    const delay = isIOSChrome() ? 100 : 0;
     
-    setTimeout(() => {
-      if (!speechInstance) return;
-      
-      // Create a new utterance in case it was destroyed
-      const newUtterance = new SpeechSynthesisUtterance(text);
-      newUtterance.lang = options.lang || 'en-US';
-      newUtterance.rate = options.rate ?? 0.8;
-      newUtterance.pitch = options.pitch ?? 1;
-      newUtterance.volume = options.volume ?? 1;
-      
-      // Find and set the appropriate voice for the language
-      const voice = findVoiceForLang(options.lang || 'en-US');
-      if (voice) {
-        newUtterance.voice = voice;
-        console.log('Using voice:', voice.name, 'for language:', options.lang);
-      } else {
-        console.warn('No specific voice found for', options.lang, ', using default');
-      }
+    // Set the voice if found
+    if (voice) {
+      utterance.voice = voice;
+      console.log('Using voice:', voice.name, 'for language:', options.lang);
+    } else {
+      console.warn('No specific voice found for', options.lang, ', using default');
+    }
 
-      // Add event listeners to handle errors
-      newUtterance.onstart = () => {
-        console.log('Speech started');
-      };
+    // Add event listeners to handle errors
+    utterance.onstart = () => {
+      console.log('Speech started for:', text);
+    };
 
-      newUtterance.onerror = (event) => {
-        console.error('Speech error:', event);
-      };
+    utterance.onerror = (event) => {
+      console.error('Speech error:', event);
+    };
 
-      newUtterance.onend = () => {
-        console.log('Speech ended');
-      };
+    utterance.onend = () => {
+      console.log('Speech ended');
+    };
 
-      // Speak
-      speechInstance.speak(newUtterance);
-      
-      // For iOS Chrome, try to resume
-      if (isIOSChrome()) {
-        setTimeout(() => {
-          if (speechInstance && speechInstance.paused) {
-            speechInstance.resume();
-          }
-        }, 50);
-      }
-    }, delay);
+    // For iOS Chrome, wait a bit before speaking
+    if (isIOSChrome()) {
+      setTimeout(() => {
+        if (speechInstance) {
+          speechInstance.speak(utterance);
+        }
+      }, 100);
+    } else {
+      // Speak immediately for other browsers
+      speechInstance.speak(utterance);
+    }
   } catch (error) {
     console.error('Error in speech synthesis:', error);
   }
