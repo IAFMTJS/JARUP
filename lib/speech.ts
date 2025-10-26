@@ -11,10 +11,33 @@ function isIOS(): boolean {
   return /iPhone|iPad|iPod/i.test(navigator.userAgent);
 }
 
+// Detect if we're on iOS Chrome
+function isIOSChrome(): boolean {
+  if (typeof window === 'undefined') return false;
+  const ua = navigator.userAgent;
+  return isIOS() && /CriOS|FxiOS|OPiOS/i.test(ua);
+}
+
 if (typeof window !== 'undefined') {
   speechSynthesisAvailable = 'speechSynthesis' in window;
+  
+  // Chrome on iOS has very limited speechSynthesis support, so we warn
+  if (isIOSChrome()) {
+    console.warn('Chrome on iOS has limited speech synthesis support. Consider using Safari for better audio playback.');
+  }
+  
   if (speechSynthesisAvailable) {
     speechInstance = window.speechSynthesis;
+    
+    // Test if speech synthesis actually works
+    try {
+      const testUtterance = new SpeechSynthesisUtterance('');
+      if (!testUtterance) {
+        speechSynthesisAvailable = false;
+      }
+    } catch (e) {
+      speechSynthesisAvailable = false;
+    }
   }
 }
 
@@ -51,7 +74,7 @@ export function speak(text: string, options: {
   volume?: number;
 } = {}): void {
   if (!speechSynthesisAvailable || !speechInstance) {
-    console.warn('Speech synthesis not available');
+    console.warn('Speech synthesis not available on this browser');
     return;
   }
 
@@ -67,24 +90,47 @@ export function speak(text: string, options: {
     utterance.pitch = options.pitch ?? 1;
     utterance.volume = options.volume ?? 1;
 
-    // Add event listeners to handle errors
-    utterance.onstart = () => {
-      console.log('Speech started');
-    };
-
-    utterance.onerror = (event) => {
-      console.error('Speech error:', event);
-    };
-
-    utterance.onend = () => {
-      console.log('Speech ended');
-    };
-
     // Cancel any ongoing speech
     speechInstance.cancel();
 
-    // Speak immediately (iOS needs this to be synchronous)
-    speechInstance.speak(utterance);
+    // For iOS Chrome, we need to wait a bit
+    const delay = isIOSChrome() ? 100 : 0;
+    
+    setTimeout(() => {
+      if (!speechInstance) return;
+      
+      // Create a new utterance in case it was destroyed
+      const newUtterance = new SpeechSynthesisUtterance(text);
+      newUtterance.lang = options.lang || 'en-US';
+      newUtterance.rate = options.rate ?? 0.8;
+      newUtterance.pitch = options.pitch ?? 1;
+      newUtterance.volume = options.volume ?? 1;
+
+      // Add event listeners to handle errors
+      newUtterance.onstart = () => {
+        console.log('Speech started');
+      };
+
+      newUtterance.onerror = (event) => {
+        console.error('Speech error:', event);
+      };
+
+      newUtterance.onend = () => {
+        console.log('Speech ended');
+      };
+
+      // Speak
+      speechInstance.speak(newUtterance);
+      
+      // For iOS Chrome, try to resume
+      if (isIOSChrome()) {
+        setTimeout(() => {
+          if (speechInstance && speechInstance.paused) {
+            speechInstance.resume();
+          }
+        }, 50);
+      }
+    }, delay);
   } catch (error) {
     console.error('Error in speech synthesis:', error);
   }
@@ -98,5 +144,10 @@ export function stopSpeech(): void {
 
 export function isSpeechSynthesisSupported(): boolean {
   return typeof window !== 'undefined' && 'speechSynthesis' in window;
+}
+
+// Export function to check if we're on iOS Chrome
+export function isOnIOSChrome(): boolean {
+  return isIOSChrome();
 }
 
