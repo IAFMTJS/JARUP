@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeft, BookOpen, Trophy, TrendingUp, Target, Award } from 'lucide-react';
 import {
@@ -18,7 +18,7 @@ import {
   Cell,
 } from 'recharts';
 
-export default function ProgressPage() {
+function ProgressPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const language = (searchParams.get('lang') || 'japanese') as 'japanese' | 'russian';
@@ -223,6 +223,14 @@ export default function ProgressPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ProgressPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ProgressPageContent />
+    </Suspense>
   );
 }
 

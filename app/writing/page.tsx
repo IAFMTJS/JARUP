@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeft, Check, RotateCcw } from 'lucide-react';
 
-export default function WritingPage() {
+function WritingPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const language = (searchParams.get('lang') || 'japanese') as 'japanese' | 'russian';
@@ -171,6 +171,14 @@ export default function WritingPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function WritingPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <WritingPageContent />
+    </Suspense>
   );
 }
 

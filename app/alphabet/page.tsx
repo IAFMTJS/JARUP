@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeft, Volume2, Play, Check, X } from 'lucide-react';
 import { hiraganaCharacters, katakanaCharacters } from '@/lib/data/japanese';
@@ -8,7 +8,7 @@ import { cyrillicCharacters } from '@/lib/data/russian';
 
 type AlphabetType = 'hiragana' | 'katakana' | 'cyrillic';
 
-export default function AlphabetPage() {
+function AlphabetPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const language = (searchParams.get('lang') || 'japanese') as 'japanese' | 'russian';
@@ -306,6 +306,14 @@ export default function AlphabetPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function AlphabetPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AlphabetPageContent />
+    </Suspense>
   );
 }
 

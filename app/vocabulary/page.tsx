@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeft, Volume2, RefreshCw, CheckCircle, XCircle } from 'lucide-react';
 import { japaneseVocabulary, russianVocabulary, VocabularyWord } from '@/lib/data/vocabulary';
 
-export default function VocabularyPage() {
+function VocabularyPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const language = (searchParams.get('lang') || 'japanese') as 'japanese' | 'russian';
@@ -277,6 +277,14 @@ export default function VocabularyPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function VocabularyPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <VocabularyPageContent />
+    </Suspense>
   );
 }
 

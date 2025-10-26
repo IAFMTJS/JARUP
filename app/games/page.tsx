@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeft, RotateCw, Award, Star } from 'lucide-react';
 
 type GameType = 'flashcards' | 'memory' | 'typing' | 'matching';
 
-export default function GamesPage() {
+function GamesPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const language = (searchParams.get('lang') || 'japanese') as 'japanese' | 'russian';
@@ -291,6 +291,14 @@ export default function GamesPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function GamesPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <GamesPageContent />
+    </Suspense>
   );
 }
 

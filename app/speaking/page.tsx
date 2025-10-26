@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeft, Mic, MicOff, Volume2, CheckCircle } from 'lucide-react';
 
-export default function SpeakingPage() {
+function SpeakingPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const language = (searchParams.get('lang') || 'japanese') as 'japanese' | 'russian';
@@ -236,6 +236,14 @@ export default function SpeakingPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function SpeakingPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SpeakingPageContent />
+    </Suspense>
   );
 }
 

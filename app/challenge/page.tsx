@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeft, Zap, Trophy, Clock } from 'lucide-react';
 import { japaneseLessons } from '@/lib/data/japanese';
 import { russianLessons } from '@/lib/data/russian';
 import { japaneseVocabulary, russianVocabulary } from '@/lib/data/vocabulary';
 
-export default function ChallengePage() {
+function ChallengePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const language = (searchParams.get('lang') || 'japanese') as 'japanese' | 'russian';
@@ -206,6 +206,14 @@ export default function ChallengePage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function ChallengePage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ChallengePageContent />
+    </Suspense>
   );
 }
 

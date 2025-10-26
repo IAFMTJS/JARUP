@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeft, CheckCircle, Lock } from 'lucide-react';
 import { japaneseLessons } from '@/lib/data/japanese';
 import { russianLessons } from '@/lib/data/russian';
 
-export default function LessonsPage() {
+function LessonsPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const language = (searchParams.get('lang') || 'japanese') as 'japanese' | 'russian';
@@ -89,6 +89,14 @@ export default function LessonsPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LessonsPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LessonsPageContent />
+    </Suspense>
   );
 }
 
