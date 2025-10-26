@@ -72,23 +72,43 @@ function findVoiceForLang(lang: string): SpeechSynthesisVoice | null {
   
   // For Japanese
   if (targetLang.includes('ja')) {
-    // Look for Japanese voices (prefer Google, Yuna, or native names)
-    const preferredNames = ['google', 'yuna', 'sayaka', 'yukari'];
+    // Look for specific high-quality Japanese voices
+    // Common Japanese voice names: Kyoko, Otoya, Takumi, Hina, Nanami
+    const preferredNames = [
+      'google japanese', 'kyoko', 'otoya', 'takumi', 'hina', 'nanami',
+      'yuna', 'sayaka', 'yukari', 'hana', 'shiori', 'mei',
+      'google jap', 'jp-'
+    ];
+    
+    console.log('Looking for Japanese voices...');
+    console.log('Available voices:', availableVoices.filter(v => v.lang.includes('ja')).map(v => v.name));
+    
     for (const name of preferredNames) {
       const voice = availableVoices.find(v => 
-        v.lang.includes('ja') && v.name.toLowerCase().includes(name.toLowerCase())
+        v.lang.includes('ja') && 
+        (v.name.toLowerCase().includes(name.toLowerCase()) || 
+         v.name.toLowerCase().replace(/\s+/g, '').includes(name.toLowerCase()))
       );
-      if (voice) return voice;
+      if (voice) {
+        console.log('Found preferred Japanese voice:', voice.name);
+        return voice;
+      }
     }
-    // Fallback to any Japanese voice
+    
+    // Fallback: try any Japanese voice
     const anyJapanese = availableVoices.find(v => v.lang.includes('ja'));
-    if (anyJapanese) return anyJapanese;
+    if (anyJapanese) {
+      console.log('Using fallback Japanese voice:', anyJapanese.name);
+      return anyJapanese;
+    }
+    
+    console.warn('No Japanese voice found!');
   }
   
   // For Russian
   if (targetLang.includes('ru')) {
     // Look for Russian voices (prefer Katya, Milena, or other Russian names)
-    const preferredNames = ['katya', 'milena', 'yuri', 'russian'];
+    const preferredNames = ['katya', 'milena', 'yuri', 'russian', 'google russian'];
     for (const name of preferredNames) {
       const voice = availableVoices.find(v => 
         v.lang.includes('ru') && v.name.toLowerCase().includes(name.toLowerCase())
