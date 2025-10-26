@@ -19,11 +19,28 @@ import {
 import { useTheme } from '@/lib/theme';
 import { FloatingShapes } from '@/components/decorations/floating-shapes';
 import { getProgress } from '@/lib/localStorage';
+import { hiraganaCharacters, katakanaCharacters, basicKanji, japaneseLessons } from '@/lib/data/japanese';
+import { cyrillicCharacters, russianLessons } from '@/lib/data/russian';
+import { japaneseVocabulary, russianVocabulary } from '@/lib/data/vocabulary';
 
 export default function Home() {
   const router = useRouter();
   const { theme, toggleTheme } = useTheme();
-  const [currentLanguage, setCurrentLanguage] = useState<'japanese' | 'russian'>('japanese');
+  
+  // Calculate real stats from data
+  const totalJapaneseChars = hiraganaCharacters.length + katakanaCharacters.length + basicKanji.length;
+  const totalRussianChars = cyrillicCharacters.length;
+  const totalJapaneseWords = japaneseVocabulary.length;
+  const totalRussianWords = russianVocabulary.length;
+  const totalLessons = japaneseLessons.length + russianLessons.length;
+  
+  const [currentLanguage, setCurrentLanguage] = useState<'japanese' | 'russian'>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('jarup_language_preference');
+      return saved === 'russian' ? 'russian' : 'japanese';
+    }
+    return 'japanese';
+  });
   const [streak, setStreak] = useState(0);
   const [dailyGoal, setDailyGoal] = useState(0);
   const [stats, setStats] = useState({
@@ -41,6 +58,13 @@ export default function Home() {
     );
     setDailyGoal(Math.min(100, Math.round((totalProgress / 300) * 100)));
   }, []);
+  
+  // Save language preference
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('jarup_language_preference', currentLanguage);
+    }
+  }, [currentLanguage]);
 
   const todayChallenge = {
     language: currentLanguage,
@@ -281,15 +305,19 @@ export default function Home() {
         {/* Quick Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
           <div className="text-center">
-            <p className="text-3xl font-bold text-primary-600">125</p>
+            <p className="text-3xl font-bold text-primary-600">
+              {currentLanguage === 'japanese' ? totalJapaneseChars : totalRussianChars}
+            </p>
             <p className="text-sm text-gray-600 dark:text-gray-400">Alphabet Characters</p>
           </div>
           <div className="text-center">
-            <p className="text-3xl font-bold text-green-600">116</p>
+            <p className="text-3xl font-bold text-green-600">
+              {currentLanguage === 'japanese' ? totalJapaneseWords : totalRussianWords}
+            </p>
             <p className="text-sm text-gray-600 dark:text-gray-400">Vocabulary Words</p>
           </div>
           <div className="text-center">
-            <p className="text-3xl font-bold text-purple-600">18</p>
+            <p className="text-3xl font-bold text-purple-600">{totalLessons}</p>
             <p className="text-sm text-gray-600 dark:text-gray-400">Lessons</p>
           </div>
           <div className="text-center">

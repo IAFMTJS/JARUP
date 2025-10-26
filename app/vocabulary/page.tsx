@@ -2,9 +2,16 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { ArrowLeft, Volume2, RefreshCw, CheckCircle, XCircle } from 'lucide-react';
+import { ArrowLeft, Volume2, RefreshCw, CheckCircle, XCircle, Star, TrendingUp } from 'lucide-react';
 import { japaneseVocabulary, russianVocabulary, VocabularyWord } from '@/lib/data/vocabulary';
 import { speak } from '@/lib/speech';
+import { 
+  getWordProgress, 
+  reviewWord, 
+  getWordsDueForReview,
+  getWordsByMasteryLevel,
+  calculateMasteryPercentage 
+} from '@/lib/spaced-repetition';
 
 function VocabularyPageContent() {
   const router = useRouter();
@@ -19,15 +26,33 @@ function VocabularyPageContent() {
   const [category, setCategory] = useState<string>('all');
   const [difficulty, setDifficulty] = useState<'all' | 'beginner' | 'intermediate' | 'advanced'>('all');
   const [flipped, setFlipped] = useState(false);
+  const [reviewMode, setReviewMode] = useState<'all' | 'new' | 'learning' | 'mastered' | 'due'>('due');
+  const [masteryPercentage, setMasteryPercentage] = useState(0);
 
   const categories = ['all', ...new Set(allVocabulary.map(w => w.category))];
   
-  const filteredWords = allVocabulary.filter(w => 
+  // Apply filters including spaced repetition review modes
+  let filteredWords = allVocabulary.filter(w => 
     (category === 'all' || w.category === category) &&
     (difficulty === 'all' || w.difficulty === difficulty)
   );
+  
+  // Apply review mode filter
+  if (reviewMode === 'due') {
+    const dueWordIds = getWordsDueForReview(filteredWords.map(w => w.id));
+    filteredWords = filteredWords.filter(w => dueWordIds.includes(w.id) || !getWordProgress(w.id));
+  } else if (reviewMode !== 'all') {
+    const wordIds = getWordsByMasteryLevel(filteredWords.map(w => w.id), reviewMode);
+    filteredWords = filteredWords.filter(w => wordIds.includes(w.id) || reviewMode === 'new' && !getWordProgress(w.id));
+  }
 
   const currentWord = filteredWords[currentIndex];
+  
+  // Calculate mastery percentage
+  useEffect(() => {
+    const percentage = calculateMasteryPercentage(allVocabulary.map(w => w.id));
+    setMasteryPercentage(percentage);
+  }, [allVocabulary]);
 
   const handleSpeak = (text: string, e?: React.MouseEvent) => {
     e?.stopPropagation();
@@ -55,11 +80,17 @@ function VocabularyPageContent() {
   };
 
   const handleCorrect = () => {
+    if (currentWord) {
+      reviewWord(currentWord.id, true);
+    }
     setScore({ correct: score.correct + 1, total: score.total + 1 });
     nextWord();
   };
 
   const handleIncorrect = () => {
+    if (currentWord) {
+      reviewWord(currentWord.id, false);
+    }
     setScore({ ...score, total: score.total + 1 });
     nextWord();
   };
@@ -159,6 +190,47 @@ function VocabularyPageContent() {
               </button>
             </div>
           </div>
+          
+          <div className="mt-4">
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Review Mode
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {(['due', 'new', 'learning', 'mastered', 'all'] as const).map((mode) => (
+                <button
+                  key={mode}
+                  onClick={() => {
+                    setReviewMode(mode);
+                    setShowAnswer(false);
+                    setFlipped(false);
+                  }}
+                  className={`px-4 py-2 rounded-lg font-semibold text-sm capitalize ${
+                    reviewMode === mode
+                      ? 'bg-primary-600 text-white'
+                      : 'bg-gray-100 text-gray-700'
+                  }`}
+                >
+                  {mode === 'due' && <Star size={16} className="inline mr-1" />}
+                  {mode}
+                </button>
+              ))}
+            </div>
+          </div>
+          
+          {/* Mastery Progress */}
+          <div className="mt-4 card">
+            <div className="flex items-center gap-2 mb-2">
+              <TrendingUp size={20} className="text-primary-600" />
+              <span className="font-semibold text-gray-700">Mastery Progress</span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-3">
+              <div 
+                className="bg-gradient-to-r from-primary-500 to-purple-600 h-3 rounded-full transition-all duration-500"
+                style={{ width: `${masteryPercentage}%` }}
+              />
+            </div>
+            <p className="text-sm text-gray-600 mt-2">{masteryPercentage}% of words mastered</p>
+          </div>
         </div>
 
         {/* Flashcard */}
@@ -167,8 +239,15 @@ function VocabularyPageContent() {
             {/* Main Card */}
             <div className="lg:col-span-2">
               <div
-                className="card h-96 flex flex-col items-center justify-center cursor-pointer hover:shadow-xl transition-all"
+                className={`card h-96 flex flex-col items-center justify-center cursor-pointer hover:shadow-xl transition-all preserve-3d ${
+                  flipped ? 'flipped' : ''
+                }`}
                 onClick={handleFlip}
+                style={{
+                  transformStyle: 'preserve-3d',
+                  transition: 'transform 0.6s',
+                  transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+                }}
               >
                 {!flipped ? (
                   studyMode === 'word-first' ? (
