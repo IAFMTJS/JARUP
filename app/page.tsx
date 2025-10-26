@@ -18,23 +18,34 @@ import {
 } from 'lucide-react';
 import { useTheme } from '@/lib/theme';
 import { FloatingShapes } from '@/components/decorations/floating-shapes';
+import { getProgress } from '@/lib/localStorage';
 
 export default function Home() {
   const router = useRouter();
   const { theme, toggleTheme } = useTheme();
   const [currentLanguage, setCurrentLanguage] = useState<'japanese' | 'russian'>('japanese');
-  const [streak, setStreak] = useState(5);
-  const [dailyGoal, setDailyGoal] = useState(85);
+  const [streak, setStreak] = useState(0);
+  const [dailyGoal, setDailyGoal] = useState(0);
+  const [stats, setStats] = useState({
+    japanese: { words: 0, characters: 0, speaking: 0 },
+    russian: { words: 0, characters: 0, speaking: 0 },
+  });
+
+  useEffect(() => {
+    const progress = getProgress();
+    setStreak(progress.streak);
+    setStats(progress.stats);
+    // Calculate daily goal based on progress
+    const totalProgress = Object.values(progress.stats).reduce((sum, lang) => 
+      sum + lang.words + lang.characters + lang.speaking, 0
+    );
+    setDailyGoal(Math.min(100, Math.round((totalProgress / 300) * 100)));
+  }, []);
 
   const todayChallenge = {
     language: currentLanguage,
     task: 'Master 5 new characters',
     progress: 60,
-  };
-
-  const stats = {
-    japanese: { words: 120, characters: 45, speaking: 65 },
-    russian: { words: 80, characters: 30, speaking: 55 },
   };
 
   const currentStats = stats[currentLanguage];
@@ -105,7 +116,7 @@ export default function Home() {
               </div>
               <h3 className="font-bold text-gray-800 dark:text-gray-200">Words Learned</h3>
             </div>
-            <p className="text-4xl font-extrabold bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent">{currentStats.words}</p>
+            <p className="text-4xl font-extrabold bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent">{currentStats.words || 0}</p>
           </div>
           <div className="card group hover:scale-105">
             <div className="flex items-center gap-3 mb-2">
@@ -114,7 +125,7 @@ export default function Home() {
               </div>
               <h3 className="font-bold text-gray-800 dark:text-gray-200">Characters</h3>
             </div>
-            <p className="text-4xl font-extrabold bg-gradient-to-r from-green-600 to-emerald-700 bg-clip-text text-transparent">{currentStats.characters}</p>
+            <p className="text-4xl font-extrabold bg-gradient-to-r from-green-600 to-emerald-700 bg-clip-text text-transparent">{currentStats.characters || 0}</p>
           </div>
           <div className="card group hover:scale-105">
             <div className="flex items-center gap-3 mb-2">
@@ -123,7 +134,7 @@ export default function Home() {
               </div>
               <h3 className="font-bold text-gray-800 dark:text-gray-200">Speaking Level</h3>
             </div>
-            <p className="text-4xl font-extrabold bg-gradient-to-r from-purple-600 to-pink-700 bg-clip-text text-transparent">{currentStats.speaking}%</p>
+            <p className="text-4xl font-extrabold bg-gradient-to-r from-purple-600 to-pink-700 bg-clip-text text-transparent">{currentStats.speaking || 0}%</p>
           </div>
           <div className="card group hover:scale-105">
             <div className="flex items-center gap-3 mb-2">

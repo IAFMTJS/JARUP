@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, Suspense } from 'react';
+import { useState, Suspense, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeft, CheckCircle, Lock } from 'lucide-react';
 import { japaneseLessons } from '@/lib/data/japanese';
 import { russianLessons } from '@/lib/data/russian';
+import { getProgress } from '@/lib/localStorage';
 
 function LessonsPageContent() {
   const router = useRouter();
@@ -12,7 +13,12 @@ function LessonsPageContent() {
   const language = (searchParams.get('lang') || 'japanese') as 'japanese' | 'russian';
   
   const lessons = language === 'japanese' ? japaneseLessons : russianLessons;
-  const [completedLessons] = useState(['jp-h1', 'ru-alpha1']);
+  const [completedLessons, setCompletedLessons] = useState<string[]>([]);
+
+  useEffect(() => {
+    const progress = getProgress();
+    setCompletedLessons(progress.completedLessons);
+  }, []);
 
   const getCategoryColor = (category: string) => {
     const colors: { [key: string]: string } = {

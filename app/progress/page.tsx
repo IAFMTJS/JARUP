@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, Suspense } from 'react';
+import { useState, Suspense, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeft, BookOpen, Trophy, TrendingUp, Target, Award } from 'lucide-react';
 import {
@@ -17,45 +17,49 @@ import {
   Pie,
   Cell,
 } from 'recharts';
+import { getProgress } from '@/lib/localStorage';
 
 function ProgressPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const language = (searchParams.get('lang') || 'japanese') as 'japanese' | 'russian';
   const [timeRange, setTimeRange] = useState<'week' | 'month' | 'all'>('week');
+  const [progress, setProgress] = useState(getProgress());
+
+  useEffect(() => {
+    setProgress(getProgress());
+  }, []);
 
   const statsData = {
-    week: [
-      { day: 'Mon', words: 5, lessons: 2 },
-      { day: 'Tue', words: 12, lessons: 3 },
-      { day: 'Wed', words: 8, lessons: 2 },
-      { day: 'Thu', words: 15, lessons: 4 },
-      { day: 'Fri', words: 10, lessons: 3 },
-      { day: 'Sat', words: 20, lessons: 5 },
-      { day: 'Sun', words: 12, lessons: 3 },
-    ],
+    week: progress.weeklyActivity,
   };
 
   const skillData = language === 'japanese'
     ? [
-        { name: 'Hiragana', value: 85, color: '#3b82f6' },
-        { name: 'Katakana', value: 65, color: '#8b5cf6' },
-        { name: 'Kanji', value: 45, color: '#f59e0b' },
-        { name: 'Grammar', value: 70, color: '#10b981' },
+        { name: 'Hiragana', value: Math.min(100, progress.stats.japanese.characters * 5), color: '#3b82f6' },
+        { name: 'Katakana', value: Math.min(100, progress.stats.japanese.characters * 3), color: '#8b5cf6' },
+        { name: 'Kanji', value: Math.min(100, progress.stats.japanese.characters * 2), color: '#f59e0b' },
+        { name: 'Grammar', value: progress.stats.japanese.speaking, color: '#10b981' },
       ]
     : [
-        { name: 'Alphabet', value: 90, color: '#3b82f6' },
-        { name: 'Pronunciation', value: 75, color: '#8b5cf6' },
-        { name: 'Vocabulary', value: 55, color: '#f59e0b' },
-        { name: 'Grammar', value: 60, color: '#10b981' },
+        { name: 'Alphabet', value: Math.min(100, progress.stats.russian.characters * 5), color: '#3b82f6' },
+        { name: 'Pronunciation', value: progress.stats.russian.speaking, color: '#8b5cf6' },
+        { name: 'Vocabulary', value: Math.min(100, progress.stats.russian.words), color: '#f59e0b' },
+        { name: 'Grammar', value: progress.stats.russian.speaking, color: '#10b981' },
       ];
 
+  const hasCompletedFirstLesson = progress.completedLessons.length > 0;
+  const hasSevenDayStreak = progress.streak >= 7;
+  const hasHundredWords = progress.wordsLearned >= 100;
+  const hasCompletedGrammar = progress.wordsLearned >= 50; // Simplified check
+  const hasPerfectWeek = progress.weeklyActivity.filter(d => d.lessons > 0).length >= 7;
+
   const achievements = [
-    { title: 'First Steps', desc: 'Completed first lesson', earned: true },
-    { title: 'Streak Master', desc: '7 day streak', earned: true },
-    { title: 'Vocabulary Expert', desc: 'Learned 100 words', earned: true },
-    { title: 'Grammar Guru', desc: 'Completed grammar section', earned: false },
-    { title: 'Perfect Week', desc: 'Studied every day', earned: false },
+    { title: 'First Steps', desc: 'Completed first lesson', earned: hasCompletedFirstLesson },
+    { title: 'Streak Master', desc: '7 day streak', earned: hasSevenDayStreak },
+    { title: 'Vocabulary Expert', desc: 'Learned 100 words', earned: hasHundredWords },
+    { title: 'Grammar Guru', desc: 'Completed grammar section', earned: hasCompletedGrammar },
+    { title: 'Perfect Week', desc: 'Studied every day', earned: hasPerfectWeek },
   ];
 
   return (
@@ -100,32 +104,32 @@ function ProgressPageContent() {
               <BookOpen className="text-primary-600" size={24} />
               <h3 className="font-semibold text-gray-700">Words Learned</h3>
             </div>
-            <p className="text-3xl font-bold text-primary-600">156</p>
-            <p className="text-sm text-gray-500 mt-1">+12 this week</p>
+            <p className="text-3xl font-bold text-primary-600">{progress.wordsLearned}</p>
+            <p className="text-sm text-gray-500 mt-1">Words mastered</p>
           </div>
           <div className="card">
             <div className="flex items-center gap-3 mb-2">
               <TrendingUp className="text-green-600" size={24} />
               <h3 className="font-semibold text-gray-700">Current Level</h3>
             </div>
-            <p className="text-3xl font-bold text-green-600">Intermediate</p>
-            <p className="text-sm text-gray-500 mt-1">25% to next level</p>
+            <p className="text-3xl font-bold text-green-600">{progress.totalXP < 500 ? 'Beginner' : progress.totalXP < 2000 ? 'Intermediate' : 'Advanced'}</p>
+            <p className="text-sm text-gray-500 mt-1">{progress.totalXP} XP</p>
           </div>
           <div className="card">
             <div className="flex items-center gap-3 mb-2">
               <Target className="text-purple-600" size={24} />
               <h3 className="font-semibold text-gray-700">Daily Streak</h3>
             </div>
-            <p className="text-3xl font-bold text-purple-600">12 days</p>
-            <p className="text-sm text-gray-500 mt-1">Keep it up!</p>
+            <p className="text-3xl font-bold text-purple-600">{progress.streak} {progress.streak > 0 ? '🔥' : ''}</p>
+            <p className="text-sm text-gray-500 mt-1">{progress.streak > 0 ? 'Keep it up!' : 'Start your streak!'}</p>
           </div>
           <div className="card">
             <div className="flex items-center gap-3 mb-2">
               <Award className="text-orange-600" size={24} />
               <h3 className="font-semibold text-gray-700">Total XP</h3>
             </div>
-            <p className="text-3xl font-bold text-orange-600">2,450</p>
-            <p className="text-sm text-gray-500 mt-1">Level 5</p>
+            <p className="text-3xl font-bold text-orange-600">{progress.totalXP.toLocaleString()}</p>
+            <p className="text-sm text-gray-500 mt-1">Level {Math.floor(progress.totalXP / 500) + 1}</p>
           </div>
         </div>
 
