@@ -260,6 +260,82 @@ export const japaneseVocabulary: VocabularyWord[] = [
   { id: 'jv204', language: 'japanese', word: '鳥', pronunciation: 'tori', translation: 'Bird', category: 'Nature', difficulty: 'beginner' },
   { id: 'jv205', language: 'japanese', word: '犬', pronunciation: 'inu', translation: 'Dog', category: 'Nature', difficulty: 'beginner' },
   { id: 'jv206', language: 'japanese', word: '猫', pronunciation: 'neko', translation: 'Cat', category: 'Nature', difficulty: 'beginner' },
+  
+  // More Actions
+  { id: 'jv207', language: 'japanese', word: '起きる', pronunciation: 'okiru', translation: 'To wake up / To get up', category: 'Verbs', difficulty: 'beginner' },
+  { id: 'jv208', language: 'japanese', word: '寝る', pronunciation: 'neru', translation: 'To sleep', category: 'Verbs', difficulty: 'beginner' },
+  { id: 'jv209', language: 'japanese', word: '起きる', pronunciation: 'okiru', translation: 'To happen / occur', category: 'Verbs', difficulty: 'intermediate' },
+  { id: 'jv210', language: 'japanese', word: '開ける', pronunciation: 'akeru', translation: 'To open', category: 'Verbs', difficulty: 'intermediate' },
+  { id: 'jv211', language: 'japanese', word: '閉める', pronunciation: 'shimeru', translation: 'To close', category: 'Verbs', difficulty: 'intermediate' },
+  { id: 'jv212', language: 'japanese', word: '持つ', pronunciation: 'motsu', translation: 'To hold / have', category: 'Verbs', difficulty: 'beginner' },
+  { id: 'jv213', language: 'japanese', word: '置く', pronunciation: 'oku', translation: 'To put / place', category: 'Verbs', difficulty: 'intermediate' },
+  { id: 'jv214', language: 'japanese', word: '着る', pronunciation: 'kiru', translation: 'To wear', category: 'Verbs', difficulty: 'intermediate' },
+  { id: 'jv215', language: 'japanese', word: '脱ぐ', pronunciation: 'nugu', translation: 'To take off (clothes)', category: 'Verbs', difficulty: 'intermediate' },
+  { id: 'jv216', language: 'japanese', word: '着く', pronunciation: 'tsuku', translation: 'To arrive', category: 'Verbs', difficulty: 'intermediate' },
+  { id: 'jv217', language: 'japanese', word: '出る', pronunciation: 'deru', translation: 'To leave / appear', category: 'Verbs', difficulty: 'intermediate' },
+  { id: 'jv218', language: 'japanese', word: '入る', pronunciation: 'hairu', translation: 'To enter', category: 'Verbs', difficulty: 'intermediate' },
+  { id: 'jv219', language: 'japanese', word: '帰る', pronunciation: 'kaeru', translation: 'To return home', category: 'Verbs', difficulty: 'intermediate' },
+  { id: 'jv220', language: 'japanese', word: '寝る', pronunciation: 'neru', translation: 'To lie down', category: 'Verbs', difficulty: 'beginner' },
+  
+  // Technology
+  { id: 'jv221', language: 'japanese', word: 'コンピューター', pronunciation: 'konpyuutaa', translation: 'Computer', category: 'Technology', difficulty: 'beginner' },
+  { id: 'jv222', language: 'japanese', word: 'スマホ', pronunciation: 'sumaho', translation: 'Smartphone', category: 'Technology', difficulty: 'beginner' },
+  { id: 'jv223', language: 'japanese', word: 'インターネット', pronunciation: 'inta-netto', translation: 'Internet', category: 'Technology', difficulty: 'intermediate' },
+  { id: 'jv224', language: 'japanese', word: 'メール', pronunciation: 'meeru', translation: 'Email', category: 'Technology', difficulty: 'beginner' },
+  { id: 'jv225', language: 'japanese', word: '電話', pronunciation: 'denwa', translation: 'Phone', category: 'Technology', difficulty: 'beginner' },
+  { id: 'jv226', language: 'japanese', word: 'テレビ', pronunciation: 'terebi', translation: 'TV', category: 'Technology', difficulty: 'beginner' },
+  { id: 'jv227', language: 'japanese', word: '音楽', pronunciation: 'ongaku', translation: 'Music', category: 'Entertainment', difficulty: 'beginner' },
+  { id: 'jv228', language: 'japanese', word: '映画', pronunciation: 'eiga', translation: 'Movie', category: 'Entertainment', difficulty: 'beginner' },
+  { id: 'jv229', language: 'japanese', word: '本', pronunciation: 'hon', translation: 'Book', category: 'Education', difficulty: 'beginner' },
+  
+  // Shopping
+  { id: 'jv230', language: 'japanese', word: 'お店', pronunciation: 'omise', translation: 'Shop / Store', category: 'Shopping', difficulty: 'beginner' },
+  { id: 'jv231', language: 'japanese', word: '買い物', pronunciation: 'kaimono', translation: 'Shopping', category: 'Shopping', difficulty: 'beginner' },
+  { id: 'jv232', language: 'japanese', word: 'お金', pronunciation: 'okane', translation: 'Money', category: 'Shopping', difficulty: 'beginner' },
+  { id: 'jv233', language: 'japanese', word: '安い', pronunciation: 'yasui', translation: 'Cheap', category: 'Shopping', difficulty: 'beginner' },
+  { id: 'jv234', language: 'japanese', word: '高い', pronunciation: 'takai', translation: 'Expensive', category: 'Shopping', difficulty: 'beginner' },
+  { id: 'jv235', language: 'japanese', word: 'いくら', pronunciation: 'ikura', translation: 'How much', category: 'Shopping', difficulty: 'beginner' },
+  
+  // Hobbies & Sports
+  { id: 'jv236', language: 'japanese', word: '趣味', pronunciation: 'shumi', translation: 'Hobby', category: 'Hobbies', difficulty: 'intermediate' },
+  { id: 'jv237', language: 'japanese', word: 'スポーツ', pronunciation: 'supootsu', translation: 'Sports', category: 'Hobbies', difficulty: 'beginner' },
+  { id: 'jv238', language: 'japanese', word: 'サッカー', pronunciation: 'sakkaa', translation: 'Soccer', category: 'Hobbies', difficulty: 'beginner' },
+  { id: 'jv239', language: 'japanese', word: 'テニス', pronunciation: 'tenisu', translation: 'Tennis', category: 'Hobbies', difficulty: 'beginner' },
+  { id: 'jv240', language: 'japanese', word: '野球', pronunciation: 'yakyuu', translation: 'Baseball', category: 'Hobbies', difficulty: 'intermediate' },
+  { id: 'jv241', language: 'japanese', word: '読書', pronunciation: 'dokusho', translation: 'Reading', category: 'Hobbies', difficulty: 'intermediate' },
+  { id: 'jv242', language: 'japanese', word: '絵を描く', pronunciation: 'e wo kaku', translation: 'To draw / paint', category: 'Hobbies', difficulty: 'intermediate' },
+  { id: 'jv243', language: 'japanese', word: '料理', pronunciation: 'ryouri', translation: 'Cooking', category: 'Hobbies', difficulty: 'intermediate' },
+  { id: 'jv244', language: 'japanese', word: 'ゲーム', pronunciation: 'geemu', translation: 'Game', category: 'Hobbies', difficulty: 'beginner' },
+  { id: 'jv245', language: 'japanese', word: '旅行', pronunciation: 'ryokou', translation: 'Travel / Trip', category: 'Hobbies', difficulty: 'intermediate' },
+  
+  // Health & Body
+  { id: 'jv246', language: 'japanese', word: '健康', pronunciation: 'kenkou', translation: 'Health', category: 'Health', difficulty: 'intermediate' },
+  { id: 'jv247', language: 'japanese', word: '病気', pronunciation: 'byouki', translation: 'Sick / Illness', category: 'Health', difficulty: 'intermediate' },
+  { id: 'jv248', language: 'japanese', word: '治す', pronunciation: 'naosu', translation: 'To heal / cure', category: 'Health', difficulty: 'advanced' },
+  { id: 'jv249', language: 'japanese', word: '薬', pronunciation: 'kusuri', translation: 'Medicine', category: 'Health', difficulty: 'intermediate' },
+  { id: 'jv250', language: 'japanese', word: '痛い', pronunciation: 'itai', translation: 'Painful / hurts', category: 'Health', difficulty: 'beginner' },
+  
+  // Times of Day
+  { id: 'jv251', language: 'japanese', word: '朝', pronunciation: 'asa', translation: 'Morning', category: 'Time', difficulty: 'beginner' },
+  { id: 'jv252', language: 'japanese', word: '昼', pronunciation: 'hiru', translation: 'Daytime / noon', category: 'Time', difficulty: 'beginner' },
+  { id: 'jv253', language: 'japanese', word: '夜', pronunciation: 'yoru', translation: 'Night', category: 'Time', difficulty: 'beginner' },
+  { id: 'jv254', language: 'japanese', word: '午前', pronunciation: 'gozen', translation: 'AM / Before noon', category: 'Time', difficulty: 'intermediate' },
+  { id: 'jv255', language: 'japanese', word: '午後', pronunciation: 'gogo', translation: 'PM / Afternoon', category: 'Time', difficulty: 'intermediate' },
+  
+  // More adjectives
+  { id: 'jv256', language: 'japanese', word: '遅い', pronunciation: 'osoi', translation: 'Slow / Late', category: 'Adjectives', difficulty: 'beginner' },
+  { id: 'jv257', language: 'japanese', word: '近い', pronunciation: 'chikai', translation: 'Near / Close', category: 'Adjectives', difficulty: 'intermediate' },
+  { id: 'jv258', language: 'japanese', word: '遠い', pronunciation: 'tooi', translation: 'Far / Distant', category: 'Adjectives', difficulty: 'intermediate' },
+  { id: 'jv259', language: 'japanese', word: '広い', pronunciation: 'hiroi', translation: 'Wide / Spacious', category: 'Adjectives', difficulty: 'intermediate' },
+  { id: 'jv260', language: 'japanese', word: '狭い', pronunciation: 'semai', translation: 'Narrow / Small', category: 'Adjectives', difficulty: 'intermediate' },
+  { id: 'jv261', language: 'japanese', word: '重い', pronunciation: 'omoi', translation: 'Heavy', category: 'Adjectives', difficulty: 'intermediate' },
+  { id: 'jv262', language: 'japanese', word: '軽い', pronunciation: 'karui', translation: 'Light (weight)', category: 'Adjectives', difficulty: 'intermediate' },
+  { id: 'jv263', language: 'japanese', word: '正しい', pronunciation: 'tadashii', translation: 'Correct', category: 'Adjectives', difficulty: 'intermediate' },
+  { id: 'jv264', language: 'japanese', word: '間違う', pronunciation: 'machigau', translation: 'Wrong / mistake', category: 'Adjectives', difficulty: 'intermediate' },
+  { id: 'jv265', language: 'japanese', word: '忙しい', pronunciation: 'isogashii', translation: 'Busy', category: 'Adjectives', difficulty: 'intermediate' },
+  { id: 'jv266', language: 'japanese', word: '暇', pronunciation: 'hima', translation: 'Free time', category: 'Adjectives', difficulty: 'intermediate' },
+  { id: 'jv267', language: 'japanese', word: '静か', pronunciation: 'shizuka', translation: 'Quiet', category: 'Adjectives', difficulty: 'intermediate' },
+  { id: 'jv268', language: 'japanese', word: 'うるさい', pronunciation: 'urusai', translation: 'Loud / noisy', category: 'Adjectives', difficulty: 'intermediate' },
 ];
 
 export const russianVocabulary: VocabularyWord[] = [
