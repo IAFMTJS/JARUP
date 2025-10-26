@@ -126,7 +126,7 @@ export default function ReadingPage() {
 
           <div className="text-center mb-6">
             <div className="text-6xl mb-4 font-serif">{exercise.display}</div>
-            {exercise.question && (
+            {'question' in exercise && exercise.question && (
               <p className="text-xl text-gray-700 mb-4">{exercise.question}</p>
             )}
             <button

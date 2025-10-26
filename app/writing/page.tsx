@@ -55,8 +55,8 @@ export default function WritingPage() {
     if (!ctx) return;
 
     const rect = canvas.getBoundingClientRect();
-    const x = e.nativeEvent instanceof MouseEvent ? e.nativeEvent.clientX - rect.left : e.touches[0].clientX - rect.left;
-    const y = e.nativeEvent instanceof MouseEvent ? e.nativeEvent.clientY - rect.top : e.touches[0].clientY - rect.top;
+    const x = e.nativeEvent instanceof MouseEvent ? e.nativeEvent.clientX - rect.left : (e.nativeEvent instanceof TouchEvent && e.nativeEvent.touches[0] ? e.nativeEvent.touches[0].clientX - rect.left : 0);
+    const y = e.nativeEvent instanceof MouseEvent ? e.nativeEvent.clientY - rect.top : (e.nativeEvent instanceof TouchEvent && e.nativeEvent.touches[0] ? e.nativeEvent.touches[0].clientY - rect.top : 0);
     
     ctx.beginPath();
     ctx.moveTo(x, y);
@@ -71,8 +71,8 @@ export default function WritingPage() {
     if (!ctx) return;
 
     const rect = canvas.getBoundingClientRect();
-    const x = e.nativeEvent instanceof MouseEvent ? e.nativeEvent.clientX - rect.left : e.touches[0].clientX - rect.left;
-    const y = e.nativeEvent instanceof MouseEvent ? e.nativeEvent.clientY - rect.top : e.touches[0].clientY - rect.top;
+    const x = e.nativeEvent instanceof MouseEvent ? e.nativeEvent.clientX - rect.left : (e.nativeEvent instanceof TouchEvent && e.nativeEvent.touches[0] ? e.nativeEvent.touches[0].clientX - rect.left : 0);
+    const y = e.nativeEvent instanceof MouseEvent ? e.nativeEvent.clientY - rect.top : (e.nativeEvent instanceof TouchEvent && e.nativeEvent.touches[0] ? e.nativeEvent.touches[0].clientY - rect.top : 0);
     
     ctx.lineTo(x, y);
     ctx.stroke();

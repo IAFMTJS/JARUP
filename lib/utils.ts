@@ -1,5 +1,13 @@
-export function cn(...classes: (string | undefined | null | false)[]): string {
-  return classes.filter(Boolean).join(' ');
+export function cn(...classes: (string | undefined | null | false | Record<string, boolean>)[]): string {
+  const result: string[] = [];
+  for (const cls of classes) {
+    if (typeof cls === 'string') {
+      result.push(cls);
+    } else if (cls && typeof cls === 'object') {
+      result.push(...Object.entries(cls).filter(([_, v]) => v).map(([k]) => k));
+    }
+  }
+  return result.join(' ');
 }
 
 export function formatDate(date: Date): string {
