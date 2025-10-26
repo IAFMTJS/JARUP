@@ -53,7 +53,7 @@
 
 @layer components {
   .card {
-    @apply rounded-2xl shadow-xl p-6 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 backdrop-blur-sm;
+    @apply rounded-2xl shadow-xl p-4 sm:p-6 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 backdrop-blur-sm;
     animation: fadeIn 0.5s ease-out;
   }
   
@@ -66,11 +66,13 @@
   }
   
   .btn-primary {
-    @apply bg-gradient-to-r from-primary-600 to-primary-700 text-white px-8 py-4 rounded-xl font-bold hover:from-primary-700 hover:to-primary-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:scale-95;
+    @apply bg-gradient-to-r from-primary-600 to-primary-700 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-xl font-bold hover:from-primary-700 hover:to-primary-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:scale-95;
+    min-height: 44px; /* Better touch target */
   }
   
   .btn-secondary {
-    @apply px-8 py-4 rounded-xl font-bold transition-all duration-300 shadow-md hover:shadow-lg;
+    @apply px-6 py-3 sm:px-8 sm:py-4 rounded-xl font-bold transition-all duration-300 shadow-md hover:shadow-lg;
+    min-height: 44px; /* Better touch target */
   }
   
   .light .btn-secondary {

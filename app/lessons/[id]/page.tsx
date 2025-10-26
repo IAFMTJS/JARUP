@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { ArrowLeft, CheckCircle, Play } from 'lucide-react';
 import { japaneseLessons } from '@/lib/data/japanese';
 import { russianLessons } from '@/lib/data/russian';
+import { completeLesson, addXP, getProgress } from '@/lib/localStorage';
 
 export default function LessonDetailPage() {
   const router = useRouter();
@@ -35,6 +36,9 @@ export default function LessonDetailPage() {
       setUserAnswer('');
       setShowResult(false);
     } else {
+      // Lesson completed - save to localStorage
+      completeLesson(lessonId);
+      addXP(score); // Award XP based on score
       setCompleted(true);
     }
   };
