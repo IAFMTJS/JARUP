@@ -1,0 +1,147 @@
+import { Lesson, Character } from '../models';
+
+export const cyrillicCharacters: Character[] = [
+  { id: 'r1', language: 'russian', character: 'А', pronunciation: 'a', meaning: 'a (as in car)' },
+  { id: 'r2', language: 'russian', character: 'Б', pronunciation: 'b', meaning: 'b (as in book)' },
+  { id: 'r3', language: 'russian', character: 'В', pronunciation: 'v', meaning: 'v (as in very)' },
+  { id: 'r4', language: 'russian', character: 'Г', pronunciation: 'g', meaning: 'g (as in go)' },
+  { id: 'r5', language: 'russian', character: 'Д', pronunciation: 'd', meaning: 'd (as in dog)' },
+  { id: 'r6', language: 'russian', character: 'Е', pronunciation: 'ye', meaning: 'ye (as in yes)' },
+  { id: 'r7', language: 'russian', character: 'Ё', pronunciation: 'yo', meaning: 'yo' },
+  { id: 'r8', language: 'russian', character: 'Ж', pronunciation: 'zh', meaning: 'zh (like s in measure)' },
+  { id: 'r9', language: 'russian', character: 'З', pronunciation: 'z', meaning: 'z (as in zoo)' },
+  { id: 'r10', language: 'russian', character: 'И', pronunciation: 'ee', meaning: 'ee (as in see)' },
+  { id: 'r11', language: 'russian', character: 'Й', pronunciation: 'y', meaning: 'y (like y in boy)' },
+  { id: 'r12', language: 'russian', character: 'К', pronunciation: 'k', meaning: 'k (as in cat)' },
+  { id: 'r13', language: 'russian', character: 'Л', pronunciation: 'l', meaning: 'l (as in love)' },
+  { id: 'r14', language: 'russian', character: 'М', pronunciation: 'm', meaning: 'm (as in man)' },
+  { id: 'r15', language: 'russian', character: 'Н', pronunciation: 'n', meaning: 'n (as in no)' },
+  { id: 'r16', language: 'russian', character: 'О', pronunciation: 'o', meaning: 'o (as in go)' },
+  { id: 'r17', language: 'russian', character: 'П', pronunciation: 'p', meaning: 'p (as in pen)' },
+  { id: 'r18', language: 'russian', character: 'Р', pronunciation: 'r', meaning: 'r (rolled r)' },
+  { id: 'r19', language: 'russian', character: 'С', pronunciation: 's', meaning: 's (as in sun)' },
+  { id: 'r20', language: 'russian', character: 'Т', pronunciation: 't', meaning: 't (as in top)' },
+  { id: 'r21', language: 'russian', character: 'У', pronunciation: 'u', meaning: 'u (as in moon)' },
+  { id: 'r22', language: 'russian', character: 'Ф', pronunciation: 'f', meaning: 'f (as in fun)' },
+  { id: 'r23', language: 'russian', character: 'Х', pronunciation: 'kh', meaning: 'kh (like ch in Bach)' },
+  { id: 'r24', language: 'russian', character: 'Ц', pronunciation: 'ts', meaning: 'ts (as in cats)' },
+  { id: 'r25', language: 'russian', character: 'Ч', pronunciation: 'ch', meaning: 'ch (as in church)' },
+  { id: 'r26', language: 'russian', character: 'Ш', pronunciation: 'sh', meaning: 'sh (as in shut)' },
+  { id: 'r27', language: 'russian', character: 'Щ', pronunciation: 'shch', meaning: 'shch (longer sh sound)' },
+  { id: 'r28', language: 'russian', character: 'Ъ', pronunciation: '', meaning: 'hard sign (silent)' },
+  { id: 'r29', language: 'russian', character: 'Ы', pronunciation: 'y', meaning: 'y (like i in ill)' },
+  { id: 'r30', language: 'russian', character: 'Ь', pronunciation: '', meaning: 'soft sign (softens consonants)' },
+  { id: 'r31', language: 'russian', character: 'Э', pronunciation: 'e', meaning: 'e (as in met)' },
+  { id: 'r32', language: 'russian', character: 'Ю', pronunciation: 'yu', meaning: 'yu (as in you)' },
+  { id: 'r33', language: 'russian', character: 'Я', pronunciation: 'ya', meaning: 'ya (as in yam)' },
+];
+
+export const russianLessons: Lesson[] = [
+  {
+    id: 'ru-alpha1',
+    language: 'russian',
+    category: 'Alphabet',
+    title: 'Cyrillic Alphabet: А-И',
+    content: [
+      { type: 'text', data: 'Learn the first 10 Cyrillic letters: А (a), Б (b), В (v), Г (g), Д (d), Е (ye), Ё (yo), Ж (zh), З (z), И (ee)' },
+    ],
+    exercises: [
+      {
+        id: 'ru-ex1',
+        type: 'matching',
+        question: 'Match the Cyrillic letter with its pronunciation',
+        options: ['А', 'Б', 'В', 'Г', 'Д'],
+        correctAnswer: ['a', 'b', 'v', 'g', 'd'],
+        points: 10,
+      },
+    ],
+    order: 1,
+  },
+  {
+    id: 'ru-alpha2',
+    language: 'russian',
+    category: 'Alphabet',
+    title: 'Cyrillic Alphabet: К-Я',
+    content: [
+      { type: 'text', data: 'Continue learning: К (k), Л (l), М (m), Н (n), О (o), П (p), Р (r), С (s), Т (t), У (u), Ф (f), Х (kh), Ц (ts), Ч (ch), Ш (sh), Щ (shch), Ъ/Ь (hard/soft signs), Ы (y), Э (e), Ю (yu), Я (ya)' },
+    ],
+    exercises: [],
+    order: 2,
+  },
+  {
+    id: 'ru-pron1',
+    language: 'russian',
+    category: 'Pronunciation',
+    title: 'Russian Pronunciation Basics',
+    content: [
+      { type: 'text', data: 'Learn about hard and soft sounds, and vowel reduction in unstressed syllables' },
+    ],
+    exercises: [],
+    order: 3,
+  },
+  {
+    id: 'ru-words1',
+    language: 'russian',
+    category: 'Vocabulary',
+    title: 'Basic Vocabulary: Greetings',
+    content: [
+      { type: 'text', data: 'Привет (Hi), Здравствуйте (Hello), Спасибо (Thank you), Пожалуйста (Please)' },
+    ],
+    exercises: [
+      {
+        id: 'ru-ex2',
+        type: 'multiple-choice',
+        question: 'What is "Thank you" in Russian?',
+        options: ['Привет', 'Спасибо', 'Здравствуйте', 'Пожалуйста'],
+        correctAnswer: 'Спасибо',
+        points: 10,
+      },
+    ],
+    order: 4,
+  },
+  {
+    id: 'ru-words2',
+    language: 'russian',
+    category: 'Vocabulary',
+    title: 'Numbers',
+    content: [
+      { type: 'text', data: 'один (1), два (2), три (3), четыре (4), пять (5), шесть (6), семь (7), восемь (8), девять (9), десять (10)' },
+    ],
+    exercises: [],
+    order: 5,
+  },
+  {
+    id: 'ru-gr1',
+    language: 'russian',
+    category: 'Grammar',
+    title: 'Basic Russian Grammar',
+    content: [
+      { type: 'text', data: 'Learn about noun cases (nominative, accusative), and verb conjugation' },
+    ],
+    exercises: [],
+    order: 6,
+  },
+  {
+    id: 'ru-gr2',
+    language: 'russian',
+    category: 'Grammar',
+    title: 'Personal Pronouns',
+    content: [
+      { type: 'text', data: 'я (I), ты (you), он/она/оно (he/she/it), мы (we), вы (you plural), они (they)' },
+    ],
+    exercises: [],
+    order: 7,
+  },
+  {
+    id: 'ru-text1',
+    language: 'russian',
+    category: 'Reading',
+    title: 'Reading Practice: Simple Sentences',
+    content: [
+      { type: 'text', data: 'Practice reading: Я люблю кофе (I love coffee), Привет, как дела? (Hi, how are you?)' },
+    ],
+    exercises: [],
+    order: 8,
+  },
+];
+
